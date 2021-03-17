@@ -166,7 +166,7 @@ def main(args=None):
     # _________________________________ filter_fasta_by_covg_and_length ____________________________#
     subparser_filter_fasta_by_covg_and_length = subparsers.add_parser(
         "filter_fasta_by_covg_and_length",
-        usage="datafunk filter_fasta_by_covg_and_length -i <input_fasta> -t <threshold> [-o <output_fasta>]",
+        usage="datafunk filter_fasta_by_covg_and_length -i <input_fasta> -t <threshold> [-o <output_fasta>] [-f <failed_qc_output_fasta>]",
         help="Removes sequences where the fraction of non-N bases falls below the threshold",
     )
 
@@ -208,6 +208,16 @@ def main(args=None):
         default=None,
         type=str,
         help="Output file name for resulting filtered FASTA (default adds .filtered to input file name)",
+    )
+    
+    subparser_filter_fasta_by_covg_and_length.add_argument(
+        "-f",
+        "--failed_qc_output_fasta",
+        dest="failed_qc_output_fasta",
+        action="store",
+        default=None,
+        type=str,
+        help="Output file name for fasta files that do not pass filtering (default do not write)",
     )
 
     subparser_filter_fasta_by_covg_and_length.add_argument(
