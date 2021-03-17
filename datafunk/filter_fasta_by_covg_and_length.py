@@ -52,12 +52,12 @@ def filter_sequences(inpath, outpath, failed_outpath, min_covg=None, min_length=
                 if min_covg and sequence_has_low_coverage(str(record.seq), min_covg):
                     low_covg_seqs.append(seq_name)
                     failed_out_handle.write(f'>{record.id }\n{str(record.seq)}\n')
-                    failed_metrics_handle.write(f'{record.id}\t{coverage_unaligned_non_N(str(record.seq))}\t{length_unaligned_sequence(str(record.seq))}')
+                    failed_metrics_handle.write(f'{record.id}\t{coverage_unaligned_non_N(str(record.seq))[1]}\t{length_unaligned_sequence(str(record.seq))}\n')
                     continue
                 if min_length and sequence_too_short(str(record.seq), min_length):
                     short_seqs.append(seq_name)
                     failed_out_handle.write(f'>{record.id }\n{str(record.seq)}\n')
-                    failed_metrics_handle.write(f'{record.id}\t{coverage_unaligned_non_N(str(record.seq))}\t{length_unaligned_sequence(str(record.seq))}')
+                    failed_metrics_handle.write(f'{record.id}\t{coverage_unaligned_non_N(str(record.seq))[1]}\t{length_unaligned_sequence(str(record.seq))}\n')
                     continue
                 out_handle.write('>' + record.id + '\n')
                 out_handle.write(str(record.seq) + '\n')
