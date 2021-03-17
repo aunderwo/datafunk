@@ -8,8 +8,8 @@ def coverage_unaligned_non_N(sequence):
 
 
 def sequence_has_low_coverage(sequence, coverage_threshold):
-    unaligned_len, fraction_N = coverage_unaligned_non_N(sequence)
-    if unaligned_len == 0 or  fraction_N < coverage_threshold / 100.0:
+    unaligned_len, fraction_non_N = coverage_unaligned_non_N(sequence)
+    if unaligned_len == 0 or fraction_non_N < coverage_threshold / 100.0:
         return True
     return False
 
@@ -46,7 +46,7 @@ def filter_sequences(inpath, outpath, failed_outpath, min_covg=None, min_length=
         failed_metrics_path = f'{os.path.splitext(failed_outpath)[0]}.metrics.tsv'
         with open(outpath, "w") as out_handle, open(failed_outpath, "w") as failed_out_handle, open(failed_metrics_path, "w") as failed_metrics_handle:
             # write header
-            failed_metrics_handle.write(f'sample\tfraction_Ns\tlength\n')
+            failed_metrics_handle.write(f'sample\tfraction_non_Ns\tlength\n')
             for seq_name in record_dict:
                 record = record_dict[seq_name]
                 if min_covg and sequence_has_low_coverage(str(record.seq), min_covg):
