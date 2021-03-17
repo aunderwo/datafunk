@@ -25,7 +25,7 @@ def length_unaligned_sequence(sequence):
     while j > 0 and unaligned_seq[j-1] == "N":
         j -= 1
     unaligned_seq = unaligned_seq[i:j]
-    return(unaligned_seq)
+    return(len(unaligned_seq))
 
 def sequence_too_short(sequence, length_threshold):
     unaligned_sequence_length = length_unaligned_sequence(sequence)
