@@ -27,35 +27,57 @@ def filter_sequences(inpath, outpath, failed_outpath, min_covg=None, min_length=
 
     if outpath is None:
         outpath = inpath.replace(".fa",".filtered.fa")
-    if failed_outpath is None:
-        failed_outpath = inpath.replace(".fa",".qc_failed.fa")
 
     low_covg_seqs = []
     short_seqs = []
 
-    with open(outpath, "w") as out_handle, open(failed_outpath, "w") as failed_out_handle:
-        for seq_name in record_dict:
-            record_seq = str(record_dict[seq_name].seq)
-            if min_covg and sequence_has_low_coverage(record_seq, min_covg):
-                low_covg_seqs.append(seq_name)
-                failed_out_handle.write(f'>{record.id }\n{str(record.seq)}\n')
-                continue
-            if min_length and sequence_too_short(record_seq, min_length):
-                short_seqs.append(seq_name)
-                failed_out_handle.write(f'>{record.id }\n{str(record.seq)}\n')
-                continue
-            record = record_dict[seq_name]
-            out_handle.write('>' + record.id + '\n')
-            out_handle.write(str(record.seq) + '\n')
-            # SeqIO.write(record_dict[seq_name], out_handle, "fasta")
+    if failed_outpath:
+        with open(outpath, "w") as out_handle, open(failed_outpath, "w") as failed_out_handle:
+            for seq_name in record_dict:
+                record_seq = str(record_dict[seq_name].seq)
+                if min_covg and sequence_has_low_coverage(record_seq, min_covg):
+                    low_covg_seqs.append(seq_name)
+                    failed_out_handle.write(f'>{record.id }\n{str(record.seq)}\n')
+                    continue
+                if min_length and sequence_too_short(record_seq, min_length):
+                    short_seqs.append(seq_name)
+                    failed_out_handle.write(f'>{record.id }\n{str(record.seq)}\n')
+                    continue
+                record = record_dict[seq_name]
+                out_handle.write('>' + record.id + '\n')
+                out_handle.write(str(record.seq) + '\n')
+                # SeqIO.write(record_dict[seq_name], out_handle, "fasta")
 
-        if min_covg:
-            print("#Low coverage sequences:")
-            for seq_name in low_covg_seqs:
-                print(seq_name)
-        if min_length:
-            print("#Short/truncated sequences:")
-            for seq_name in short_seqs:
-                print(seq_name)
+            if min_covg:
+                print("#Low coverage sequences:")
+                for seq_name in low_covg_seqs:
+                    print(seq_name)
+            if min_length:
+                print("#Short/truncated sequences:")
+                for seq_name in short_seqs:
+                    print(seq_name)
+    else:
+        with open(outpath, "w") as out_handle:
+            for seq_name in record_dict:
+                record_seq = str(record_dict[seq_name].seq)
+                if min_covg and sequence_has_low_coverage(record_seq, min_covg):
+                    low_covg_seqs.append(seq_name)
+                    continue
+                if min_length and sequence_too_short(record_seq, min_length):
+                    short_seqs.append(seq_name)
+                    continue
+                record = record_dict[seq_name]
+                out_handle.write('>' + record.id + '\n')
+                out_handle.write(str(record.seq) + '\n')
+                # SeqIO.write(record_dict[seq_name], out_handle, "fasta")
+
+            if min_covg:
+                print("#Low coverage sequences:")
+                for seq_name in low_covg_seqs:
+                    print(seq_name)
+            if min_length:
+                print("#Short/truncated sequences:")
+                for seq_name in short_seqs:
+                    print(seq_name)
 
     record_dict.close()
