@@ -48,18 +48,17 @@ def filter_sequences(inpath, outpath, failed_outpath, min_covg=None, min_length=
             # write header
             failed_metrics_handle.write(f'sample\tfraction_Ns\tlength\n')
             for seq_name in record_dict:
-                record_seq = str(record_dict[seq_name].seq)
-                if min_covg and sequence_has_low_coverage(record_seq, min_covg):
+                record = record_dict[seq_name]
+                if min_covg and sequence_has_low_coverage(str(record.seq), min_covg):
                     low_covg_seqs.append(seq_name)
                     failed_out_handle.write(f'>{record.id }\n{str(record.seq)}\n')
-                    failed_metrics_handle.write(f'{record.id}\t{coverage_unaligned_non_N(record.seq)}\t{sequence_has_low_coverage(record.seq)}')
+                    failed_metrics_handle.write(f'{record.id}\t{coverage_unaligned_non_N(str(record.seq))}\t{sequence_has_low_coverage(str(record.seq))}')
                     continue
-                if min_length and sequence_too_short(record_seq, min_length):
+                if min_length and sequence_too_short(str(record.seq), min_length):
                     short_seqs.append(seq_name)
                     failed_out_handle.write(f'>{record.id }\n{str(record.seq)}\n')
-                    failed_metrics_handle.write(f'{record.id}\t{coverage_unaligned_non_N(record.seq)}\t{sequence_has_low_coverage(record.seq)}')
+                    failed_metrics_handle.write(f'{record.id}\t{coverage_unaligned_non_N(str(record.seq))}\t{sequence_has_low_coverage(str(record.seq)}')
                     continue
-                record = record_dict[seq_name]
                 out_handle.write('>' + record.id + '\n')
                 out_handle.write(str(record.seq) + '\n')
     else:
